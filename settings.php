@@ -1,44 +1,82 @@
 <?php
-// Site title
-$app['site.title'] = 'AGENDAV_TITLE';
-// Site logo (should be placed in public/img). Optional
-$app['site.logo'] = 'agendav_100transp.png';
-// Site footer. Optional
-$app['site.footer'] = 'AGENDAV_FOOTER';
-// Trusted proxy ips
-$app['proxies'] = [];
-// Database settings
-$app['db.options'] = [
-    	'path' => '/var/agendav/db.sqlite',
-    	'driver' => 'pdo_sqlite',
-];
-// Log path
-$app['log.path'] = 'AGENDAV_LOG_DIR';
-// Base URL
-$app['caldav.baseurl'] = 'AGENDAV_CALDAV_SERVER';
-// Authentication method required by CalDAV server (basic or digest)
-$app['caldav.authmethod'] = 'basic';
-// Whether to show public CalDAV urls
-$app['caldav.publicurls'] = true;
-// Whether to show public CalDAV urls
-$app['caldav.baseurl.public'] = 'AGENDAV_CALDAV_PUBLIC_URL';
-// Default timezone
-$app['defaults.timezone'] = 'AGENDAV_TIMEZONE';
-// Default languajge
-$app['defaults.language'] = 'AGENDAV_LANG';
-// Default time format. Options: '12' / '24'
-$app['defaults.time.format'] = '24';
-/*
- * Default date format. Options:
+/**
+ * AgenDAV instance configuration.
  *
- * - ymd: YYYY-mm-dd
- * - dmy: dd-mm-YYYY
- * - mdy: mm-dd-YYYY
+ * Copy this file to settings.php and adjust the values for your setup.
+ * Do not modify default.settings.php - it is overwritten on upgrades.
+ *
+ * Only settings that differ from the defaults need to be included here.
+ * See default.settings.php for the full list with documentation.
  */
-$app['defaults.date_format'] = 'ymd';
-// Default first day of week. Options: 0 (Sunday), 1 (Monday)
-$app['defaults.weekstart'] = 'AGENDAV_WEEKSTART';
-// Logout redirection. Optional
-$app['logout.redirection'] = '';
-// Calendar sharing
-$app['calendar.sharing'] = true;
+
+return [
+    // ------------------------------------------------------------------
+    // Site
+    // ------------------------------------------------------------------
+
+    'site.title' => 'AGENDAV_TITLE',
+    'site.footer' => 'AGENDAV_FOOTER',
+    'log.path' => 'AGENDAV_LOG_DIR',
+
+    // ------------------------------------------------------------------
+    // Database
+    // ------------------------------------------------------------------
+
+    'db.options' => [
+        'driver'   => 'pdo_mysql',
+        'host'     => 'AGENDAV_DB_HOST',
+        'dbname'   => 'AGENDAV_DB_DATABASE',
+        'user'     => 'AGENDAV_DB_USER',
+        'password' => 'AGENDAV_DB_PASSWORD',
+        'charset'  => 'utf8mb4',
+    ],
+
+    // PostgreSQL example:
+    // 'db.options' => [
+    //     'driver'   => 'pdo_pgsql',
+    //     'host'     => 'localhost',
+    //     'dbname'   => 'agendav',
+    //     'user'     => 'agendav',
+    //     'password' => 'change-me',
+    // ],
+
+    // SQLite example (testing/single-user only):
+    // 'db.options' => [
+    //     'driver' => 'pdo_sqlite',
+    //     'path'   => __DIR__ . '/../database/agendav.sqlite',
+    // ],
+
+    // ------------------------------------------------------------------
+    // Security - REQUIRED: replace with a random string
+    // Generate with: php -r 'echo bin2hex(random_bytes(32))."\n";'
+    // ------------------------------------------------------------------
+
+    'csrf.secret' => 'AGENDAV_CSRF_SECRET',
+
+    // ------------------------------------------------------------------
+    // CalDAV server
+    // ------------------------------------------------------------------
+
+    // Internal URL used by AgenDAV to talk to the CalDAV server
+    'caldav.baseurl' => 'AGENDAV_CALDAV_SERVER',
+
+    // Authentication method: 'basic' or 'digest'
+    'caldav.authmethod' => 'basic',
+
+    // Whether to show CalDAV URLs to users
+    'caldav.publicurls' => true,
+
+    // Public URL shown to users (may differ from the internal one)
+    'caldav.baseurl.public' => 'AGENDAV_CALDAV_PUBLIC_URL',
+
+    // ------------------------------------------------------------------
+    // Locale defaults (users can override these in their preferences)
+    // ------------------------------------------------------------------
+
+    'defaults.timezone'   => 'Europe/Paris',
+    'defaults.language'   => 'AGENDAV_LANG',
+    'defaults.time_format' => '24',
+    'defaults.date_format' => 'dmy',
+    'defaults.weekstart'  => 1,
+
+];
